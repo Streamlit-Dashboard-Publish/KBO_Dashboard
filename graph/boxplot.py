@@ -5,6 +5,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 from matplotlib import rc
+import plotly.express as px
 
 # 포수 / 내야수 / 외야수
 df = pd.read_csv('62540_KBO_prediction_data/Regular_Season_Batter.csv')
@@ -31,8 +32,10 @@ try:
 
         # 박스 플롯 그리기
         fig1, ax1 = plt.subplots()
-        in_df.boxplot(column='OPS', by='team', ax=ax1)
-        st.pyplot(fig1)
+        fig1 = px.box(in_df, x='team', y='OPS')
+        # in_df.boxplot(column='OPS', by='team', ax=ax1)
+        st.plotly_chart(fig1)
+
 
     elif selected_positions=='외야수':
         st.title('팀별 외야수 Box Plot')
@@ -42,8 +45,9 @@ try:
 
         # 박스 플롯 그리기
         fig2, ax2 = plt.subplots()
-        out_df.boxplot(column='OPS', by='team', ax=ax2)
-        st.pyplot(fig2)
+        fig2 = px.box(out_df, x='team', y='OPS')
+        # out_df.boxplot(column='OPS', by='team', ax=ax2)
+        st.plotly_chart(fig2)
 
     elif selected_positions=='포수':
         st.title('팀별 포수 Box Plot')
@@ -53,9 +57,10 @@ try:
 
         # 박스 플롯 그리기
         fig3, ax3 = plt.subplots()
-        home_df.boxplot(column='OPS', by='team', ax=ax3)
-        st.pyplot(fig3)
+        fig3 = px.box(home_df, x='team', y='OPS')
+        # home_df.boxplot(column='OPS', by='team', ax=ax3)
+        st.plotly_chart(fig3)
 
 except:
     fig4, ax4 = plt.subplots()
-    st.pyplot(fig4)
+    st.plotly_chart(fig4)
