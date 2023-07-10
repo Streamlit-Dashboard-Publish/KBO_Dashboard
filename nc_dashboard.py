@@ -40,16 +40,12 @@ koreanize_dict = {'타율': 'avg', '장타율': 'SLG', '출루율': 'OBP', 'OPS'
                   '경기당 루타수': 'TB/G', '경기당 도루성공': 'SB/G', '경기당 도루실패': 'CS/G',
                   '경기당 볼넷': 'BB/G', '경기당 삼진': 'SO/G', '경기당 병살타': 'GDP/G'}
 
-
-
 # 데이터 불러오기
 def get_df():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    
     team_df = pd.read_csv(os.path.join(current_dir, 'data/team_rank_table_2008_2018.csv'))
     bat_df = pd.read_csv(os.path.join(current_dir, 'data/regular_season_batter.csv'))
     bat_image = pd.read_csv(os.path.join(current_dir, 'data/nc_player_img.csv'))
-    
     return team_df, bat_df, bat_image
 
 # 선수 세부정보 불러오기
@@ -62,11 +58,9 @@ def get_player_detail(column):
 # 연도별 구단의 경기 당 지표 계산
 def stats_by_g(df, stats):
     col_names = [f'{stat}/G' for stat in stats]
-    
     div_df = df.apply(lambda x: x[stats] / x['경기'], axis = 1)
     div_df.columns = col_names
     df = pd.concat([df, div_df], axis = 1).drop(columns = stats)
-
     return df
 
 # 1-10 범위 값을 갖는 rank를 0-1로 min-max 스케일링
@@ -74,12 +68,10 @@ def rank_scaling(df):
     df['scaled_rank'] = 1 - ((df['순위'] - df['순위'].min()) / (df['순위'].max() - df['순위'].min()))
     return df
 
-
 team_df, bat_df, bat_image = get_df()
 
 # 타수 하위 25% 제외
 bat_df = bat_df.loc[bat_df['AB'] >= 39, :]
-    
     
 # Title section
 col1, col2, col3 = st.columns((3.5, 5.5, 1))
@@ -145,7 +137,6 @@ if year >= 2013:
         # NC선수의 팀 내 홈런 기여 비율
         team_hr = nc_bat.loc[nc_bat['batter_name'] != nc_player, 'HR'].sum()
         player_hr = nc_bat.loc[nc_bat['batter_name'] == nc_player]['HR'].sum()
-
         hr_ratio_df = pd.DataFrame({'Category': ['팀', '개인'],
                                     'Count': [team_hr, player_hr]})
         hr_ratio_df['Category'] = pd.Categorical(hr_ratio_df['Category'], categories = ['개인', '팀'], ordered = True)
@@ -164,7 +155,6 @@ if year >= 2013:
                                    'xanchor': 'center'},
                           height = 250)
         st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
-    
         
     with col4:
         # NC선수의 볼넷 대비 삼진 비율
@@ -194,7 +184,6 @@ if year >= 2013:
         # 해당 연도에 데이터가 모두 0인 경우
         else:
             empty = pd.DataFrame({'Category': ['볼넷', '삼진'], 'Count': [1, 1]})
-            
             fig = go.Figure(data=go.Pie(labels = empty['Category'], values = empty['Count'], hole=0.5,
                                         marker = dict(colors = nc_colors),
                                         sort = False,
@@ -212,7 +201,7 @@ if year >= 2013:
     with col5:
         team_avg_ops = bat_df.loc[bat_df['team']=='NC'].groupby('year')['OPS'].mean().reset_index()
         player_ops = bat_df.loc[(bat_df['team']=='NC')&(bat_df['batter_name']==nc_player)]
-        
+    
         fig = go.Figure(data=[go.Bar(x=team_avg_ops['year'],
                                      y=team_avg_ops['OPS'],
                                      name='팀 평균 OPS',
@@ -230,14 +219,14 @@ if year >= 2013:
         st.plotly_chart(fig, theme = 'streamlit', use_container_width = True)
         
 else:
-    st.markdown('NC Dinos는 **2013년**에 창단했습니다.')
+    st.markdown('NC Dinos는 **2013년**에 창단했습니다.')
 
-# League section 1
+# League section
 st.subheader('KBO League')
 
-## 지표 tab
 tab_stat, tab_rank = st.tabs(['지표', '순위'])
 
+## 지표 tab
 with tab_stat:
     # 선택 위젯 레이아웃 설정
     _, s_col1, _, s_col2 = st.columns((3.8, 1.2, 4, 1), gap = 'large')
@@ -249,8 +238,6 @@ with tab_stat:
     selected_positions = s_col2.selectbox('포지션', positions, label_visibility = 'collapsed')
     
     col1, col2 = st.columns(2, gap = 'large')
-    
-    temp_team = team_df.copy()
 
     # 선택된 연도의 구단별 평균 타격 지표 차트
     with col1:
@@ -316,6 +303,7 @@ with tab_rank:
                                        options = team_df['팀명'].unique(),
                                        default = 'NC',
                                        label_visibility = 'collapsed')
+        
     # 차트 레이아웃 설정
     col1, col2 = st.columns(2, gap = 'large')
     
@@ -330,12 +318,10 @@ with tab_rank:
     with col2:
         # 연도별 팀 순위 라인차트
         team_tmp = team_df.copy()
-        
         fig = go.Figure()
-        
+
         for team in team_tmp['팀명'].unique():
             team_data = team_tmp[team_tmp['팀명'] == team]
-            
             if team in selected_team:
                 fig.add_trace(go.Scatter(x = team_data['연도'], y = team_data['순위'], name = team,
                                          line = dict(color = team_colors[team]),
