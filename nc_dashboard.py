@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 
 st.set_page_config(
-    page_title = 'KBO NC dinos Dashboard',
+    page_title = 'KBO NC Dinos Dashboard',
     page_icon = '⚾️',
     layout = 'wide',
     initial_sidebar_state = 'collapsed',
@@ -57,11 +57,12 @@ def get_player_detail(column):
 
 # 연도별 구단의 경기 당 지표 계산
 def stats_by_g(df, stats):
+    tmp_df = df.copy()
     col_names = [f'{stat}/G' for stat in stats]
-    div_df = df.apply(lambda x: x[stats] / x['경기'], axis = 1)
+    div_df = tmp_df.apply(lambda x: x[stats] / x['경기'], axis = 1)
     div_df.columns = col_names
-    df = pd.concat([df, div_df], axis = 1).drop(columns = stats)
-    return df
+    tmp_df = pd.concat([tmp_df, div_df], axis = 1).drop(columns = stats)
+    return tmp_df
 
 # 1-10 범위 값을 갖는 rank를 0-1로 min-max 스케일링
 def rank_scaling(df):
