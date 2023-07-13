@@ -1,2 +1,2 @@
 # KBO_Dashboard
-Streamlit KBO 대쉬보드
+NC Dinos 타자 대시보드 (KBO NC 구단 타자에 대한 탐색)
