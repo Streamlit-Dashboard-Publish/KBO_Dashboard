@@ -1,2 +1,2 @@
 # KBO_Dashboard
-NC Dinos 타자 대시보드
+NC Dinos 대시보드
