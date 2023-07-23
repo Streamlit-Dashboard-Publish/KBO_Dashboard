@@ -1,7 +1,7 @@
 # ⚾ NC Dinos 대시보드
 
 [](https://kbo-dashboard.streamlit.app/)
-
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://kbo-dashboard.streamlit.app/)
 ![Untitled](https://github.com/Streamlit-Guide-Web-App-Development/KBO_Dashboard/blob/main/NC-Dinos-dashboard-streamlit-app.png)
 
 ### 대시보드 설명
