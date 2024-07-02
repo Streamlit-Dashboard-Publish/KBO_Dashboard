@@ -311,7 +311,7 @@ with tab_rank:
     with col1:
         # 연도별 순위 테이블 출력
         team_tmp = team_df.copy()
-        st.dataframe(team_tmp.loc[team_tmp['연도'] == year, '순위':'방문'],
+        st.dataframe(team_tmp.loc[team_tmp['연도'] == year, :].drop('연도', axis=1),
                      hide_index = True,
                      height = 387,
                      use_container_width = True)
